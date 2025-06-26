@@ -87,6 +87,7 @@ daily_df = (detail_df.groupby(['날짜','키워드'])
 
 
 # 2-d) 단어 빈도
+okt = Okt() 
 stop = {'이즐', 'ezl', '티머니', '캐시비'} # 제외할 단어
 ja_cn, co_cn = Counter(), Counter()
 for row in detail_df[['구분', '제목']].itertuples(index=False):
