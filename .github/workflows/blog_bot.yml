@@ -1,11 +1,17 @@
 name: Weekly Blog Bot
 
+################################################################################
+# 1) 워크플로 트리거
+################################################################################
 on:
   schedule:
-    # 매주 월요일 07:00 KST  (UTC 일 22:00)
+    # 매주 월요일 07:00 KST  →  UTC 일요일 22:00
     - cron: '0 22 * * 0'
-  workflow_dispatch:
+  workflow_dispatch:             # “Run workflow” 버튼으로 수동 실행
 
+################################################################################
+# 2) 전역 환경변수 (GitHub Secrets로부터 주입)
+################################################################################
 env:
   PYTHON_VERSION: '3.11'
   NAVER_CLIENT_ID:      ${{ secrets.NAVER_CLIENT_ID }}
@@ -14,34 +20,48 @@ env:
   CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
   OPENAI_API_KEY:       ${{ secrets.OPENAI_API_KEY }}
 
+################################################################################
+# 3) 잡 정의
+################################################################################
 jobs:
   run:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    # 3-1. 리포지토리 체크아웃
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Set up JDK 17          # konlpy용 Java
+    # 3-2. javac 설치 (konlpy의 Okt 필요)
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
-        java-version: '17'
+        distribution: temurin
+        java-version: 17
 
+    # 3-3. Python 설치
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
+    # 3-4. pip 캐시 (선택이지만 속도 향상)
     - name: Cache pip
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
+    # 3-5. 의존성 설치
     - name: Install dependencies
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
 
+    # 3-6. 디버그용 트리 출력 (문제 발생 시 주석 해제)
+    # - name: Debug – list files
+    #   run: find . -maxdepth 2 -type f
+
+    # 3-7. 블로그 봇 스크립트 실행
     - name: Run blog bot
-      run: python blog_bot.py        # ← 파일명만 수정
+      run: python blog_bot.py
