@@ -1,16 +1,19 @@
 import os, re, time, requests, pandas as pd
-import openai, textwrap, json, tiktoken
+import textwrap, json, tiktoken
 from datetime import datetime, timedelta
 from collections import Counter
 from konlpy.tag import Okt
 import base64
+import openai
 
 confluence_api_token = os.environ.get("CONFLUENCE_API_TOKEN")
 confluence_api_user = os.environ.get("CONFLUENCE_API_USER")
 CID  = os.environ.get("NAVER_CLIENT_ID")
 CSEC = os.environ.get("NAVER_CLIENT_SECRET")
+
 openai_api_key = os.environ.get("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=openai_api_key)
+
 HEAD = {'X-Naver-Client-Id': CID, 'X-Naver-Client-Secret': CSEC}
 URL  = 'https://openapi.naver.com/v1/search/blog.json'
 
