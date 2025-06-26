@@ -21,11 +21,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Clean install openai
-        run: |
-          pip uninstall openai -y || true
-          pip install openai==1.24.0
-
       - name: Install dependencies
         run: pip install -r requirements.txt
 
