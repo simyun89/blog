@@ -19,7 +19,7 @@ URL  = 'https://openapi.naver.com/v1/search/blog.json'
 
 space_key = 'CSO'
 parent_page_id = '661848065'
-title = "주간 앱 리뷰 분석 리포트_" + datetime.now().strftime("%Y-%m-%d")
+title = "주간 브랜드 모니터링 리포트_" + datetime.now().strftime("%Y-%m-%d")
 keywords = [ '"이즐 교통카드"', '"ezl"',  '"이즐"', '"캐시비"', '"이동의즐거움"', '"티머니"']   # 원하는 만큼 추가
 mapping  = {'이동의즐거움':'자사', '이즐':'자사', 'ezl':'자사', '이즐 교통카드':'자사', '캐시비':'자사',
             '티머니':'경쟁사'}
