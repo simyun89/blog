@@ -103,9 +103,9 @@ ja_top += [('', 0)] * (max_len - len(ja_top))
 co_top += [('', 0)] * (max_len - len(co_top))
 freq_side_df = pd.DataFrame({
     '단어(자사)' : [w for w, _ in ja_top],
-    '자사'       : [c for _, c in ja_top],
+    '건수'       : [c for _, c in ja_top],
     '단어(경쟁사)': [w for w, _ in co_top],
-    '경쟁사'     : [c for _, c in co_top],
+    '건수'     : [c for _, c in co_top],
 })
 
 # 2-e) GPT로 이슈 클러스터링
@@ -122,14 +122,18 @@ def gpt_cluster(title_list, label):
 
       {titles_block}
 
-      1) 비슷한 제목끼리 묶어 '이슈 유형'을 최대 10개로 정의해 주세요.
-      2) 각 유형별 제목 건수를 세어 JSON 배열로만 출력해 주세요.
+      다음 조건을 반드시 지켜주세요.
+      1) 의미가 유사하거나 반복되는 제목끼리 묶어서, '이슈 유형'을 최대 10개까지 도출하세요.
+      2) 각 이슈 유형별로 제목 건수를 세서, ["이슈 유형", 건수] 형태의 JSON 배열로 출력하세요.
+      3) 반드시 다음과 같은 필드명만 사용하세요: "type" (이슈 유형), "count" (건수)
+      4) 설명, 해설, 추가 코멘트, 예시 등은 절대 포함하지 마세요. 오직 JSON만 반환하세요.
+      5) 출력 예시 형식: [{"type": "이슈 유형1", "count": 15}, {"type": "이슈 유형2", "count": 10}, ...]
 
-      반드시 JSON 만 출력 (설명 금지)
+      오직 JSON 데이터만 결과로 출력하세요.
     """).strip()
 
     resp = openai.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.1",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )
