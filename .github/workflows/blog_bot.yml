@@ -1,7 +1,7 @@
 name: Run Blog Bot
 
 on:
-  workflow_dispatch:        # 수동 실행만
+  workflow_dispatch:
 
 jobs:
   run:
@@ -21,8 +21,16 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Clean install openai
+        run: |
+          pip uninstall openai -y || true
+          pip install openai==1.24.0
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Check openai version
+        run: pip show openai
 
       - name: Run blog bot
         run: python blog_bot.py
