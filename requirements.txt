@@ -1,6 +1,6 @@
-openai==1.24.0
-tiktoken==0.6.0
-pandas==2.2.2
-requests==2.32.3
-konlpy==0.6.0
-jpype1==1.5.0
+openai
+tiktoken
+pandas
+requests
+konlpy
+jpype1
