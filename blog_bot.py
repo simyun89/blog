@@ -26,6 +26,7 @@ mapping  = {'이동의즐거움':'자사', '이즐':'자사', 'ezl':'자사', '�
 end_date   = (datetime.now() - timedelta(days=1)).date()
 start_date = (datetime.now() - timedelta(days=7)).date()
 kw_order = [kw.strip('"') for kw in keywords]
+okt = Okt() 
 
 # 블로그 데이터 수집
 detail_rows = []
@@ -87,7 +88,6 @@ daily_df = (detail_df.groupby(['날짜','키워드'])
 
 
 # 2-d) 단어 빈도
-okt = Okt() 
 stop = {'이즐', 'ezl', '티머니', '캐시비'} # 제외할 단어
 ja_cn, co_cn = Counter(), Counter()
 for row in detail_df[['구분', '제목']].itertuples(index=False):
