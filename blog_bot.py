@@ -117,21 +117,20 @@ def gpt_cluster(title_list, label):
     if num_tokens(titles_block) > 7000:
         titles_block = "\n".join(f"- {t}" for t in title_list[:600])
 
-prompt = textwrap.dedent(f"""
-  아래는 최근 7일간 **{label}** 블로그 글 제목 리스트입니다.
+    prompt = textwrap.dedent(f"""
+      아래는 최근 7일간 **{label}** 블로그 글 제목 리스트입니다.
 
-  {titles_block}
+      {titles_block}
 
-  다음 조건을 반드시 지켜주세요.
-  1) 의미가 유사하거나 반복되는 제목끼리 묶어서, '이슈 유형'을 최대 10개까지 도출하세요.
-  2) 각 이슈 유형별로 제목 건수를 세서, ["이슈 유형", 건수] 형태의 JSON 배열로 출력하세요.
-  3) 반드시 다음과 같은 필드명만 사용하세요: "type" (이슈 유형), "count" (건수)
-  4) 설명, 해설, 추가 코멘트, 예시 등은 절대 포함하지 마세요. 오직 JSON만 반환하세요.
-  5) 출력 예시 형식: [{{"type": "이슈 유형1", "count": 15}}, {{"type": "이슈 유형2", "count": 10}}, ...]
-
-  오직 JSON 데이터만 결과로 출력하세요.
-""").strip()
-
+      다음 조건을 반드시 지켜주세요.
+      1) 의미가 유사하거나 반복되는 제목끼리 묶어서, '이슈 유형'을 최대 10개까지 도출하세요.
+      2) 각 이슈 유형별로 제목 건수를 세서, ["이슈 유형", 건수] 형태의 JSON 배열로 출력하세요.
+      3) 반드시 다음과 같은 필드명만 사용하세요: "type" (이슈 유형), "count" (건수)
+      4) 설명, 해설, 추가 코멘트, 예시 등은 절대 포함하지 마세요. 오직 JSON만 반환하세요.
+      5) 출력 예시 형식: [{{"type": "이슈 유형1", "count": 15}}, {{"type": "이슈 유형2", "count": 10}}, ...]
+      
+      오직 JSON 데이터만 결과로 출력하세요.
+    """).strip()
 
     resp = openai.chat.completions.create(
         model="gpt-4.1",
@@ -147,15 +146,12 @@ prompt = textwrap.dedent(f"""
     issue_df.columns = [c.lower() for c in issue_df.columns]
 
     if 'count' not in issue_df.columns:
-        num_cols = [c for c in issue_df.columns
-                    if pd.api.types.is_numeric_dtype(issue_df[c])]
+        num_cols = [c for c in issue_df.columns if pd.api.types.is_numeric_dtype(issue_df[c])]
         if num_cols:
             issue_df = issue_df.rename(columns={num_cols[0]: 'count'})
 
     if 'type' not in issue_df.columns:
-        cat_cols = [c for c in issue_df.columns
-                    if not pd.api.types.is_numeric_dtype(issue_df[c])
-                    and c != '구분']
+        cat_cols = [c for c in issue_df.columns if not pd.api.types.is_numeric_dtype(issue_df[c]) and c != '구분']
         if cat_cols:
             issue_df = issue_df.rename(columns={cat_cols[0]: 'type'})
     issue_df.insert(0, '구분', label)   # 자사/경쟁사 표시
