@@ -193,7 +193,7 @@ issue_comp_tbl_html = (
 
 # 3-b) Confluence 본문 템플릿
 body_html = f"""
-<h2>📝 참고 사항</h2>
+<br><h2>📝 참고 사항</h2>
 <ul>
   <li>본 보고서는 매주 월요일 오전 7시에 자동 발송됩니다.</li>
   <li>지난주(월~일) 네이버 블로그에 게시된 글을 기준으로 작성되었습니다.</li>
@@ -213,10 +213,12 @@ body_html = f"""
 <br><h2>🗣️ 4. 단어 빈도(Top 20)</h2>
 {freq_html}
 
-<br><h2>💡 5. GPT 이슈 클러스터링</h2>
+<br><h2>💡 5. AI 기반 블로그 이슈 유형 정리</h2>
+<ul>
+  <li>GPT로 블로그 글을 분석하여 주요 이슈를 유형별로 정리한 표입니다.</li>
+</ul>
 <h3>① 자사 TOP 이슈</h3>
 {issue_jasa_tbl_html}
-
 <br><h3>② 경쟁사 TOP 이슈</h3>
 {issue_comp_tbl_html}
 
