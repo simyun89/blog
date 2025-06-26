@@ -163,7 +163,6 @@ issue_df_jasa = gpt_cluster(titles_jasa, '자사')
 issue_df_comp = gpt_cluster(titles_comp, '경쟁사')
 
 issue_df_all = pd.concat([issue_df_jasa, issue_df_comp], ignore_index=True)
-display(issue_df_all)
 
 def make_bullet(df):     #  리포트 문구
     return "\n".join(
@@ -176,12 +175,6 @@ print("\n[경쟁사 이슈 Top]\n", make_bullet(issue_df_comp))
 
 # 결과 확인 / 저장
 pd.set_option('display.max_colwidth', None)
-display(summary_df)
-display(summary_kw_df)
-display(daily_df)
-display(detail_df.head(10))
-display(freq_side_df)
-
 detail_df.to_csv('blog_detail.csv',  index=False, encoding='utf-8-sig')
 
 # ── 3. 리포트용 HTML · 본문 구성 ──────────────────────────────
