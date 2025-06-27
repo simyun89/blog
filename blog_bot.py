@@ -8,14 +8,14 @@ import openai
 
 confluence_api_token = os.environ.get("CONFLUENCE_API_TOKEN")
 confluence_api_user = os.environ.get("CONFLUENCE_API_USER")
+
 CID  = os.environ.get("NAVER_CLIENT_ID")
 CSEC = os.environ.get("NAVER_CLIENT_SECRET")
+HEAD = {'X-Naver-Client-Id': CID, 'X-Naver-Client-Secret': CSEC}
+URL  = 'https://openapi.naver.com/v1/search/blog.json'
 
 openai_api_key = os.environ.get("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=openai_api_key)
-
-HEAD = {'X-Naver-Client-Id': CID, 'X-Naver-Client-Secret': CSEC}
-URL  = 'https://openapi.naver.com/v1/search/blog.json'
 
 space_key = 'CSO'
 parent_page_id = '661848065'
@@ -23,6 +23,7 @@ title = f"주간 브랜드 모니터링 리포트_{datetime.now():%Y-%m-%d}"
 keywords = [ '"이즐 교통카드"', '"ezl"',  '"이즐"', '"캐시비"', '"이동의즐거움"', '"티머니"']   # 원하는 만큼 추가
 mapping  = {'이동의즐거움':'자사', '이즐':'자사', 'ezl':'자사', '이즐 교통카드':'자사', '캐시비':'자사',
             '티머니':'경쟁사'}
+
 end_date   = (datetime.now() - timedelta(days=1)).date()
 start_date = (datetime.now() - timedelta(days=7)).date()
 kw_order = [kw.strip('"') for kw in keywords]
@@ -108,7 +109,7 @@ freq_side_df = pd.DataFrame({
     '건수(경쟁사)' : [c for _, c in co_top],
 })
 
-# 2-e) GPT로 이슈 클러스터링
+# 2-e) GPT 이슈 클러스터링
 enc = tiktoken.encoding_for_model("gpt-4o-mini")
 def num_tokens(txt): return len(enc.encode(txt))
 
@@ -156,7 +157,7 @@ def gpt_cluster(title_list, label):
     issue_df.insert(0, '구분', label)   # 자사/경쟁사 표시
     return issue_df
 
-titles_jasa = detail_df.query("구분 == '자사'")['제목'].tolist()   #  자사·경쟁사 각각 호출
+titles_jasa = detail_df.query("구분 == '자사'")['제목'].tolist()  
 titles_comp = detail_df.query("구분 == '경쟁사'")['제목'].tolist()
 
 issue_df_jasa = gpt_cluster(titles_jasa, '자사')
@@ -172,12 +173,11 @@ def make_bullet(df):     #  리포트 문구
 print("\n[자사 이슈 Top]\n", make_bullet(issue_df_jasa))
 print("\n[경쟁사 이슈 Top]\n", make_bullet(issue_df_comp))
 
-
 # 결과 확인 / 저장
 pd.set_option('display.max_colwidth', None)
 detail_df.to_csv('blog_detail.csv',  index=False, encoding='utf-8-sig')
 
-# ── 3. 리포트용 HTML · 본문 구성 ──────────────────────────────
+# 리포트용 HTML · 본문 구성
 summary_html      = summary_df.fillna('').to_html(index=False, border=1)
 summary_kw_html   = summary_kw_df.to_html(index=False, border=1)    # fillna('') X
 daily_html        = daily_df.fillna('').reset_index(names='날짜').to_html(index=False, border=1)
@@ -191,7 +191,7 @@ issue_comp_tbl_html = (
                  .to_html(index=False, border=1)
 )
 
-# 3-b) Confluence 본문 템플릿
+# Confluence 본문 템플릿
 body_html = f"""
 <br><h2>📝 참고 사항</h2>
 <ul>
@@ -225,7 +225,7 @@ body_html = f"""
 <br><h2>📥 [Raw Data] 상세 내역 다운로드</h2>
 """
 
-# ── 4. Confluence 페이지 생성 ────────────────────────────────
+# Confluence 페이지 생성 
 confluence_domain = 'myezl.atlassian.net'
 headers = {
     'Authorization': 'Basic ' +
@@ -247,7 +247,7 @@ resp.raise_for_status()
 page_id = resp.json()['id']
 print("페이지 생성 ✔", page_id)
 
-# ── 5. CSV 첨부 & 링크 삽입 ──────────────────────────────────
+#  CSV 첨부 & 링크 삽입
 attach_url  = f"{base_url}{page_id}/child/attachment"
 attach_head = {
     "Authorization": headers['Authorization'],
@@ -260,7 +260,7 @@ aresp.raise_for_status()
 fname = aresp.json()['results'][0]['title']
 print("첨부 ✔", fname)
 
-# 페이지 버전 올려서 첨부 링크(ri:attachment) 삽입
+# 페이지 버전 올려서 첨부 삽입
 ver = requests.get(f"{base_url}{page_id}?expand=version",
                    headers=headers).json()['version']['number']
 patch = {
