@@ -179,7 +179,7 @@ detail_df.to_csv('blog_detail.csv',  index=False, encoding='utf-8-sig')
 
 # ── 3. 리포트용 HTML · 본문 구성 ──────────────────────────────
 summary_html      = summary_df.fillna('').to_html(index=False, border=1)
-summary_kw_html   = summary_kw_df.fillna('').to_html(index=False, border=1)
+summary_kw_html   = summary_kw_df.to_html(index=False, border=1)    # fillna('') X
 daily_html        = daily_df.fillna('').reset_index(names='날짜').to_html(index=False, border=1)
 freq_html         = freq_side_df.fillna('').to_html(index=False, border=1)
 issue_jasa_tbl_html = (
