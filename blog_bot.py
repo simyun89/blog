@@ -237,7 +237,7 @@ base_url = f'https://{confluence_domain}/wiki/rest/api/content/'
 
 page_data = {
     "type": "page",
-    "title": "주간 블로그 모니터링 리포트_" + datetime.now().strftime("%Y-%m-%d"),
+    "title": title,
     "ancestors": [{"id": parent_page_id}],
     "space": {"key": space_key},
     "body": {"storage": {"value": body_html, "representation": "storage"}}
