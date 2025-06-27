@@ -19,7 +19,7 @@ URL  = 'https://openapi.naver.com/v1/search/blog.json'
 
 space_key = 'CSO'
 parent_page_id = '661848065'
-title = "주간 브랜드 모니터링 리포트_" + datetime.now().strftime("%Y-%m-%d")
+title = f"주간 블로그 모니터링 리포트_{datetime.now():%Y-%m-%d %H:%M}"
 keywords = [ '"이즐 교통카드"', '"ezl"',  '"이즐"', '"캐시비"', '"이동의즐거움"', '"티머니"']   # 원하는 만큼 추가
 mapping  = {'이동의즐거움':'자사', '이즐':'자사', 'ezl':'자사', '이즐 교통카드':'자사', '캐시비':'자사',
             '티머니':'경쟁사'}
@@ -246,11 +246,6 @@ resp = requests.post(base_url, headers=headers, json=page_data)
 resp.raise_for_status()
 page_id = resp.json()['id']
 print("페이지 생성 ✔", page_id)
-
-resp = requests.post(base_url, headers=headers, json=page_data)
-if not resp.ok:
-    print("Confluence API Response:\n", resp.text)
-resp.raise_for_status()
 
 # ── 5. CSV 첨부 & 링크 삽입 ──────────────────────────────────
 attach_url  = f"{base_url}{page_id}/child/attachment"
