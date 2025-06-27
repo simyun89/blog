@@ -19,7 +19,7 @@ URL  = 'https://openapi.naver.com/v1/search/blog.json'
 
 space_key = 'CSO'
 parent_page_id = '661848065'
-title = f"주간 블로그 모니터링 리포트_{datetime.now():%Y-%m-%d}"
+title = f"주간 브랜드 모니터링 리포트_{datetime.now():%Y-%m-%d}"
 keywords = [ '"이즐 교통카드"', '"ezl"',  '"이즐"', '"캐시비"', '"이동의즐거움"', '"티머니"']   # 원하는 만큼 추가
 mapping  = {'이동의즐거움':'자사', '이즐':'자사', 'ezl':'자사', '이즐 교통카드':'자사', '캐시비':'자사',
             '티머니':'경쟁사'}
@@ -213,16 +213,16 @@ body_html = f"""
 <br><h2>🗣️ 4. 단어 빈도(Top 20)</h2>
 {freq_html}
 
-<br><h2>💡 5. AI 기반 블로그 이슈 유형 정리</h2>
+<br><h2>💡 5. AI 기반 이슈 유형 정리</h2>
 <ul>
-  <li>GPT로 블로그 글을 분석하여 주요 이슈를 유형별로 정리한 표입니다.</li>
+  <li>GPT로 수집된 데이터를 분석하여 주요 이슈를 유형별로 정리한 표입니다.</li>
 </ul>
 <h3>① 자사 TOP 이슈</h3>
 {issue_jasa_tbl_html}
 <br><h3>② 경쟁사 TOP 이슈</h3>
 {issue_comp_tbl_html}
 
-<br><h2>📥 [Raw Data] 블로그 상세 내역 다운로드</h2>
+<br><h2>📥 [Raw Data] 상세 내역 다운로드</h2>
 """
 
 # ── 4. Confluence 페이지 생성 ────────────────────────────────
