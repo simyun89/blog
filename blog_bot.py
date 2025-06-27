@@ -103,9 +103,9 @@ ja_top += [('', 0)] * (max_len - len(ja_top))
 co_top += [('', 0)] * (max_len - len(co_top))
 freq_side_df = pd.DataFrame({
     '단어(자사)' : [w for w, _ in ja_top],
-    '건수'       : [c for _, c in ja_top],
+    '건수(자사)'  : [c for _, c in ja_top],
     '단어(경쟁사)': [w for w, _ in co_top],
-    '건수'     : [c for _, c in co_top],
+    '건수(경쟁사)' : [c for _, c in co_top],
 })
 
 # 2-e) GPT로 이슈 클러스터링
