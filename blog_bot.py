@@ -110,7 +110,7 @@ freq_side_df = pd.DataFrame({
 })
 
 # 2-e) GPT 이슈 클러스터링
-enc = tiktoken.encoding_for_model("gpt-4.1")
+enc = tiktoken.get_encoding("cl100k_base")
 def num_tokens(txt): return len(enc.encode(txt))
 
 def gpt_cluster(title_list, label):
