@@ -178,16 +178,16 @@ pd.set_option('display.max_colwidth', None)
 detail_df.to_csv('blog_detail.csv',  index=False, encoding='utf-8-sig')
 
 # ── 3. 리포트용 HTML · 본문 구성 ──────────────────────────────
-summary_html      = summary_df.to_html(index=False, border=1)
-summary_kw_html   = summary_kw_df.to_html(index=False, border=1)
-daily_html        = daily_df.reset_index(names='날짜').to_html(index=False, border=1)
-freq_html         = freq_side_df.to_html(index=False, border=1)
+summary_html      = summary_df.fillna('').to_html(index=False, border=1)
+summary_kw_html   = summary_kw_df.fillna('').to_html(index=False, border=1)
+daily_html        = daily_df.fillna('').reset_index(names='날짜').to_html(index=False, border=1)
+freq_html         = freq_side_df.fillna('').to_html(index=False, border=1)
 issue_jasa_tbl_html = (
-    issue_df_jasa.rename(columns={'type': '이슈 유형', 'count': '건수'})
+    issue_df_jasa.fillna('').rename(columns={'type': '이슈 유형', 'count': '건수'})
                  .to_html(index=False, border=1)
 )
 issue_comp_tbl_html = (
-    issue_df_comp.rename(columns={'type': '이슈 유형', 'count': '건수'})
+    issue_df_comp.fillna('').rename(columns={'type': '이슈 유형', 'count': '건수'})
                  .to_html(index=False, border=1)
 )
 
@@ -246,6 +246,11 @@ resp = requests.post(base_url, headers=headers, json=page_data)
 resp.raise_for_status()
 page_id = resp.json()['id']
 print("페이지 생성 ✔", page_id)
+
+resp = requests.post(base_url, headers=headers, json=page_data)
+if not resp.ok:
+    print("Confluence API Response:\n", resp.text)
+resp.raise_for_status()
 
 # ── 5. CSV 첨부 & 링크 삽입 ──────────────────────────────────
 attach_url  = f"{base_url}{page_id}/child/attachment"
