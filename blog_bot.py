@@ -19,7 +19,7 @@ client = openai.OpenAI(api_key=openai_api_key)
 
 space_key = 'CSO'
 parent_page_id = '661848065'
-title = f"주간 브랜드 모니터링 리포트_{datetime.now():%Y-%m-%d}"
+title = f"주간 브랜드 모니터링_{datetime.now():%Y-%m-%d}"
 keywords = [ '"이즐 교통카드"', '"ezl"',  '"이즐"', '"캐시비"', '"이동의즐거움"', '"티머니"']   # 원하는 만큼 추가
 mapping  = {'이동의즐거움':'자사', '이즐':'자사', 'ezl':'자사', '이즐 교통카드':'자사', '캐시비':'자사',
             '티머니':'경쟁사'}
